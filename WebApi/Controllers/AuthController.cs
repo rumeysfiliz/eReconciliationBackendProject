@@ -1,8 +1,5 @@
 ﻿using Business.Abstract;
-using Core.Utilities.Results.Concrete;
-using Entities.Concrete;
 using Entities.Dtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -30,17 +27,17 @@ namespace WebApi.Controllers
             var companyExists = _authService.CompanyExists(userAndCompanyRegister.Company);
             if (!companyExists.Success)
             {
-                return BadRequest(userExists.Message);  
+                return BadRequest(userExists.Message);
             }
 
             var registerResult = _authService.Register(userAndCompanyRegister.UserForRegister, userAndCompanyRegister.UserForRegister.Password, userAndCompanyRegister.Company);
-            
-            var result = _authService.CreateAccessToken(registerResult.Data, registerResult.Data.CompanyId);  
+
+            var result = _authService.CreateAccessToken(registerResult.Data, registerResult.Data.CompanyId);
             if (result.Success)
             {
                 return Ok(result.Data);
             }
-           
+
             return BadRequest(registerResult.Message);
         }
 
@@ -49,7 +46,7 @@ namespace WebApi.Controllers
         public IActionResult RegisterSecondAccount(UserForRegisterToSecondAccountDto userForRegister)
         {
             var userExists = _authService.UserExists(userForRegister.Email);
-            if(!userExists.Success)
+            if (!userExists.Success)
             {
                 return BadRequest(userExists.Message);  //Bu kullanıcı varsa bana hata döndürsün manasında
             }
@@ -66,9 +63,9 @@ namespace WebApi.Controllers
         public IActionResult Login(UserForLogin userForLogin)
         {
             var userToLogin = _authService.Login(userForLogin);
-            if (!userToLogin.Success) 
-            { 
-                return BadRequest(userToLogin.Message);            
+            if (!userToLogin.Success)
+            {
+                return BadRequest(userToLogin.Message);
             }
 
             if (userToLogin.Data.IsActive)
@@ -77,9 +74,9 @@ namespace WebApi.Controllers
                 var result = _authService.CreateAccessToken(userToLogin.Data, userCompany.CompanyId);
                 if (result.Success)
                 {
-                    return Ok(result.Data);
+                    return Ok(result);
                 }
-                return BadRequest(result.Message);
+                return BadRequest(result);
             }
             return BadRequest("Kullanıcı pasif durumda. Aktif etmek için yöneticinize danışın.");
 
@@ -96,7 +93,7 @@ namespace WebApi.Controllers
             if (result.Success)
             {
                 return Ok(result);
-                
+
             }
             return BadRequest(result.Message);
         }

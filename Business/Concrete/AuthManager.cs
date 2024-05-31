@@ -1,8 +1,6 @@
 ﻿using Business.Abstract;
 using Business.Constans;
-using Business.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Transaction;
-using Core.CrossCuttingConcerns.Validation;
 using Core.Entities.Concrete;
 using Core.Utilities.Hashing;
 using Core.Utilities.Results.Abstract;
@@ -10,14 +8,6 @@ using Core.Utilities.Results.Concrete;
 using Core.Utilities.Security.JWT;
 using Entities.Concrete;
 using Entities.Dtos;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Business.Concrete
 {
@@ -61,7 +51,7 @@ namespace Business.Concrete
             var claims = _userService.GetClaims(user, companyId);
 
             var accessToken = _tokenHelper.CreateToken(user, claims, companyId);
-            return new SuccesDataResult<AccessToken>(accessToken);
+            return new SuccesDataResult<AccessToken>(accessToken, Messages.SuccesfulLogin);
         }
 
         public IDataResult<User> GetById(int id)
@@ -92,7 +82,7 @@ namespace Business.Concrete
         [TransactionScopeAspect]
         public IDataResult<UserCompanyDto> Register(UserForRegister userForRegister, string password, Company company) //kayıt işlemimiz.
         {
-           
+
 
 
             byte[] passwordHash, passwordSalt;
@@ -110,7 +100,7 @@ namespace Business.Concrete
                 PasswordSalt = passwordSalt
             };
 
-            
+
 
             _userService.Add(user);
             _companyService.Add(company);
@@ -132,7 +122,7 @@ namespace Business.Concrete
 
 
             };
-            
+
 
             SendConfirmEmail(user);
 
@@ -163,7 +153,7 @@ namespace Business.Concrete
 
             };
             _mailService.SendMail(sendMailDto);
-            
+
             user.MailConfirmDate = DateTime.Now;
             _userService.Update(user);
 
@@ -247,7 +237,7 @@ namespace Business.Concrete
 
         public IDataResult<UserCompany> GetCompany(int userId)
         {
-            return new SuccesDataResult<UserCompany>(_companyService.GetCompany(userId).Data);  
+            return new SuccesDataResult<UserCompany>(_companyService.GetCompany(userId).Data);
         }
     }
 }

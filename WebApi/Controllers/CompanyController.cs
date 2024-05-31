@@ -2,7 +2,6 @@
 using Entities.Concrete;
 using Entities.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebApi.Controllers
 {
@@ -51,16 +50,16 @@ namespace WebApi.Controllers
             }
             return BadRequest(result.Message);
         }
-        //[HttpPost("addCompany")]
-        //public IActionResult AddCompany(Company company, int userId)
-        //{
-        //    var result = _companyService.Add(company);
-        //    if (result.Success)
-        //    {
-        //        return Ok(result);
-        //    }
-        //    return BadRequest(result.Message);
-        //}
+        [HttpPost("addCompany")]
+        public IActionResult AddCompany(Company company, int userId)
+        {
+            var result = _companyService.Add(company);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result.Message);
+        }
         [HttpPost("updateCompany")]
         public IActionResult UpdateCompany(Company company)
         {

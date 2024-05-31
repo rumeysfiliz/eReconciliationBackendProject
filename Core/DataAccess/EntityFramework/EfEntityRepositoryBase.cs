@@ -1,11 +1,6 @@
 ﻿using Core.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.DataAccess.EntityFramework
 {
@@ -27,7 +22,7 @@ namespace Core.DataAccess.EntityFramework
         {
             using (var context = new TContext())
             {
-                var deletedEntity = context.Entry(entity); 
+                var deletedEntity = context.Entry(entity);
                 deletedEntity.State = EntityState.Deleted;
                 context.SaveChanges();
             }
@@ -45,7 +40,7 @@ namespace Core.DataAccess.EntityFramework
         {
             using (var context = new TContext())
             {
-                return filter ==null  //Single If Line yapısı tek satırlık bir if sorgusu demek
+                return filter == null  //Single If Line yapısı tek satırlık bir if sorgusu demek
                     ? context.Set<TEntity>().ToList()
                     : context.Set<TEntity>().Where(filter).ToList();
             }
@@ -55,7 +50,7 @@ namespace Core.DataAccess.EntityFramework
         {
             using (var context = new TContext())
             {
-                var updatedEntity = context.Entry(entity); 
+                var updatedEntity = context.Entry(entity);
                 updatedEntity.State = EntityState.Modified;
                 context.SaveChanges();
             }
